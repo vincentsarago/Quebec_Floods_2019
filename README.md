@@ -34,7 +34,7 @@ des images satellitaires dans le visible et proche infrarouge sur les zones les 
 
 - https://geoegl.msp.gouv.qc.ca/partageDQ/inondations2019/msp_inondations2019_eaulibre_20190425.zip
 
-#### Microsfot Building ([ref](https://github.com/Microsoft/CanadianBuildingFootprints))
+#### Microsoft Buildings ([ref](https://github.com/Microsoft/CanadianBuildingFootprints))
 
 - https://usbuildingdata.blob.core.windows.net/canadian-buildings/Quebec.zip
 
