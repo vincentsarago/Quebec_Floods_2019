@@ -1,5 +1,12 @@
 
-# WIP - Work in Progress
+# 2019 Spring flood in Quebec
+
+
+Sample of geospatial analysis from opendata on the 2019 spring floods in Quebec.
+
+![](https://user-images.githubusercontent.com/10407788/56869292-f3709f80-69cc-11e9-982d-a3e0367dcfe3.jpg)
+
+**Mapbox Map**: https://api.mapbox.com/styles/v1/vincentsarago/cjv17uopy9knc1ftlq5c71jnc.html?fresh=true&title=true&access_token=pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjamxwa3JkaWkwZ3BjM3dudmZmazQwYjI2In0.eUzks_hqH-QVIlnXUKmKsA#13.53/45.60849/-73.84227
 
 ## Data
 
@@ -114,7 +121,7 @@ UPDATE quebec
 
 ### Processing
 
-##### Find buildings inpacted by the 2019 spring flood (27/04/2019)
+### Find buildings inpacted by the 2019 spring flood (27/04/2019)
 ```sql
 DROP TABLE IF EXISTS buildings_impacted ;
 CREATE TABLE buildings_impacted
@@ -133,7 +140,7 @@ SELECT count(*) FROM buildings_impacted
 19 999
 ```
 
-##### Find buildings in known flood risk area
+### Find buildings in known flood risk area
 
 ##### Create building centroids
 ```sql
