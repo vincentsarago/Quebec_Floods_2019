@@ -34,10 +34,16 @@ des images satellitaires dans le visible et proche infrarouge sur les zones les 
 
 - https://geoegl.msp.gouv.qc.ca/partageDQ/inondations2019/msp_inondations2019_eaulibre_20190425.zip
 
-#### Microsoft Buildings ([ref](https://github.com/Microsoft/CanadianBuildingFootprints))
+#### Microsoft Buildings ([ref](https://github.com/Microsoft/CanadianBuildingFootprints)) ([mbtiles](https://s3.amazonaws.com/opendata.remotepixel.ca/ms_buildings/quebec_buildings.mbtiles))
 
-- https://usbuildingdata.blob.core.windows.net/canadian-buildings/Quebec.zip
+- https://usbuildingdata.blob.core.windows.net/canadian-buildings/Quebec.zip 
 
+
+#### CAN - Open Database of Buildings ([ref](https://www.statcan.gc.ca/eng/open-building-data/open-database)) ([mbtiles](https://s3.amazonaws.com/opendata.remotepixel.ca/odb/odb_quebec_buildings.mbtiles))
+
+> The inputs for the ODB are datasets provided by municipal, regional or provincial sources available to the general public through open government portals under various types of open data licenses. The current version of the database (version 2.0) contains approximately 4.4 million records and includes provinces and territories where open building footprints were found during the collection period (from January to August 2018 for version 1.0, and February 2019 for additions made in version 2.0).
+
+- https://www.statcan.gc.ca/sites/default/files/upload/media/ODB_v2_Quebec.zip
 
 ## Create PostGIS db
 
@@ -59,6 +65,9 @@ $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f Post
 $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/msp_inondations2019_eaulibre_20190425/msp_inondations2019_eaulibre.shp"
 
 $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/Bdzi.sqlite"
+
+# CAN - QC Buildings
+$ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/ODB_Quebec/odb_quebec.shp"
 ```
 
 
