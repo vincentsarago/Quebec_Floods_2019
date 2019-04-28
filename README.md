@@ -30,7 +30,7 @@ des images satellitaires dans le visible et proche infrarouge sur les zones les 
 
 > Note:
 
-> Les acquisitions satellites de Radarsat-2 sont planifiées en collaboration avec Ressources naturelles Canada. L’accès à des satellites radars d’autres agences spatiales canadiennes est possible grâce à l’activation de la Charte internationale espace et catastrophe majeure. Celle-ci est activée par Sécurité publique Canada. Les images obtenues via la charte internationale sont traitées par les services géomatiques d’urgence de Ressources naturelles Canada dans les meilleurs délais puis les polygones d'étendue d'eau libre sont diffusés en données ouvertes sur Données Canada et sur Données Québec. D’autres acquisitions optiques ou radars peuvent avoir été obtenues par le ministère de la Sécurité publique (MSP) de fournisseurs privés. Les acquisitions Sentinel-1 et Sentinel-2 diffusées en données ouvertes par l’agence spatiale européenne (ASE) ont été traitées par la firme Dromadaire-Geo-Innovations. 
+> Les acquisitions satellites de Radarsat-2 sont planifiées en collaboration avec Ressources naturelles Canada. L’accès à des satellites radars d’autres agences spatiales canadiennes est possible grâce à l’activation de la Charte internationale espace et catastrophe majeure. Celle-ci est activée par Sécurité publique Canada. Les images obtenues via la charte internationale sont traitées par les services géomatiques d’urgence de Ressources naturelles Canada dans les meilleurs délais puis les polygones d'étendue d'eau libre sont diffusés en données ouvertes sur Données Canada et sur Données Québec. D’autres acquisitions optiques ou radars peuvent avoir été obtenues par le ministère de la Sécurité publique (MSP) de fournisseurs privés. Les acquisitions Sentinel-1 et Sentinel-2 diffusées en données ouvertes par l’agence spatiale européenne (ASE) ont été traitées par la firme Dromadaire-Geo-Innovations.
 
 - https://geoegl.msp.gouv.qc.ca/partageDQ/inondations2019/msp_inondations2019_eaulibre_20190425.zip
 
@@ -53,7 +53,7 @@ $ docker-compose up -d
 $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/Quebec.geojson"
 
 # Load Flood data
-$ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/grillepresencezoneinondable.geojson"
+$ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/grillepresencezoneinondable.json"
 
 # Load Flood data
 $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/msp_inondations2019_eaulibre_20190425/msp_inondations2019_eaulibre.shp"
