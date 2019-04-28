@@ -22,7 +22,7 @@
 
 - ftp://ftp.mddelcc.gouv.qc.ca/DONNEES_OUVERTES/Base_donnees_zones_inondables/Bdzi_sqlite.zip
 
-#### Spring 2019 Floods ([ref](https://www.donneesquebec.ca/recherche/fr/dataset/cartographie-des-inondations-printemps-2019))
+#### Spring 2019 Floods ([ref](https://www.donneesquebec.ca/recherche/fr/dataset/cartographie-des-inondations-printemps-2019)) - Updated Daily
 
 > Attention: les données d'étendue d'eau sont une interprétation en temps quasi réel de données satellites et n'ont pas encore été validées de manière exhaustive. Le produit peut contenir des erreurs, en particulier dans les zones urbaines.
 
@@ -36,7 +36,7 @@ des images satellitaires dans le visible et proche infrarouge sur les zones les 
 
 > Les acquisitions satellites de Radarsat-2 sont planifiées en collaboration avec Ressources naturelles Canada. L’accès à des satellites radars d’autres agences spatiales canadiennes est possible grâce à l’activation de la Charte internationale espace et catastrophe majeure. Celle-ci est activée par Sécurité publique Canada. Les images obtenues via la charte internationale sont traitées par les services géomatiques d’urgence de Ressources naturelles Canada dans les meilleurs délais puis les polygones d'étendue d'eau libre sont diffusés en données ouvertes sur Données Canada et sur Données Québec. D’autres acquisitions optiques ou radars peuvent avoir été obtenues par le ministère de la Sécurité publique (MSP) de fournisseurs privés. Les acquisitions Sentinel-1 et Sentinel-2 diffusées en données ouvertes par l’agence spatiale européenne (ASE) ont été traitées par la firme Dromadaire-Geo-Innovations.
 
-- https://geoegl.msp.gouv.qc.ca/partageDQ/inondations2019/msp_inondations2019_eaulibre_20190425.zip
+- https://geoegl.msp.gouv.qc.ca/partageDQ/inondations2019/msp_inondations2019_eaulibre_20190427_1600.zip
 
 #### Waterbody map of Quebec (2010) ([ref](https://mern.gouv.qc.ca/territoire/portrait/portrait-donnees-mille.jsp))
 
@@ -79,7 +79,6 @@ $ fio cat data/hydro_s/hydro_s.shp | jq -c 'select(.properties.HYS_DE_IND=="Lac"
 
 $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/hydro_s/hydro_s.geojson"
 
-
 # Load MS buildings
 $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/Quebec.geojson"
 
@@ -87,7 +86,54 @@ $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f Post
 $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/ODB_Quebec/odb_quebec.shp"
 ```
 
-### Process
+### Pre-Processing
+
+http://blog.cleverelephant.ca/2018/09/postgis-external-storage.html
+
+```sql
+-- Change the storage type
+ALTER TABLE msp_inondations2019_eaulibre
+  ALTER COLUMN geom
+  SET STORAGE EXTERNAL;
+  
+-- Force the column to rewrite
+UPDATE msp_inondations2019_eaulibre
+  SET geom = ST_SetSRID(geom, 4326);
+```
+
+```sql
+-- Change the storage type
+ALTER TABLE quebec
+  ALTER COLUMN geom
+  SET STORAGE EXTERNAL;
+
+-- Force the column to rewrite
+UPDATE quebec
+  SET geom = ST_SetSRID(geom, 4326);
+```
+
+### Processing
+
+##### Find buildings inpacted by the 2019 spring flood (27/04/2019)
+```sql
+DROP TABLE IF EXISTS buildings_impacted ;
+CREATE TABLE buildings_impacted
+AS
+SELECT
+	buildings.*
+FROM
+	quebec buildings,
+	msp_inondations2019_eaulibre flooded_area
+WHERE
+	st_intersects(buildings.geom, flooded_area.geom)
+```
+
+```sql
+SELECT count(*) FROM buildings_impacted 
+19 999
+```
+
+##### Find buildings in known flood risk area
 
 ##### Create building centroids
 ```sql
@@ -100,10 +146,10 @@ FROM
 	quebec
 ```
 
-##### Find buildings in flood area
+##### Find buildings at risk
 ```sql
-DROP TABLE IF EXISTS buildings_in_floodarea ;
-CREATE TABLE buildings_in_floodarea
+DROP TABLE IF EXISTS buildings_at_risk ;
+CREATE TABLE buildings_at_risk
 AS
 SELECT
 	centroids.*
