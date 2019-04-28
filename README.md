@@ -6,7 +6,13 @@ Sample of geospatial analysis from opendata on the 2019 spring floods in Quebec.
 
 ![](https://user-images.githubusercontent.com/10407788/56869292-f3709f80-69cc-11e9-982d-a3e0367dcfe3.jpg)
 
-**Mapbox Map**: https://api.mapbox.com/styles/v1/vincentsarago/cjv17uopy9knc1ftlq5c71jnc.html?fresh=true&title=true&access_token=pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjamxwa3JkaWkwZ3BjM3dudmZmazQwYjI2In0.eUzks_hqH-QVIlnXUKmKsA#13.53/45.60849/-73.84227
+![](https://user-images.githubusercontent.com/10407788/56869645-e0f86500-69d0-11e9-8dcd-32d1130b0cf5.jpg)
+
+## Mapbox Map: 
+
+**QuebecFlood2019** : https://api.mapbox.com/styles/v1/vincentsarago/cjv17uopy9knc1ftlq5c71jnc.html?fresh=true&title=true&access_token=pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjamxwa3JkaWkwZ3BjM3dudmZmazQwYjI2In0.eUzks_hqH-QVIlnXUKmKsA#13.53/45.60849/-73.84227
+
+**QuebecFlood2019Satellite** : https://api.mapbox.com/styles/v1/vincentsarago/cjv1cxdbr3f0w1fo77847qepn.html?fresh=true&title=true&access_token=pk.eyJ1IjoidmluY2VudHNhcmFnbyIsImEiOiJjamxwa3JkaWkwZ3BjM3dudmZmazQwYjI2In0.eUzks_hqH-QVIlnXUKmKsA#18.6/45.518067/-73.854696/0
 
 ## Data
 
