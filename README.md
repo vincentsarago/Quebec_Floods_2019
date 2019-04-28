@@ -3,14 +3,18 @@
 
 ## Data
 
+#### Quebec - Multirisk Event flux (point)
+
+> La carte de Vigilance multirisque est un produit développé par le ministère de la Sécurité publique (MSP) qui regroupe des avertissements et des signalements sur des phénomènes, d’origine naturelle pouvant avoir des conséquences sur la sécurité des citoyens, des biens et des services à la population. Elle est mise à jour en continu de façon automatique. Elle permet d’effectuer une surveillance en continu du territoire de la province relativement aux phénomènes naturels dangereux.
+
+- https://geoegl.msp.gouv.qc.ca/ws/igo_gouvouvert.fcgi?service=wfs&version=1.1.0&request=getfeature&typename=msp_vigilance_crue_publique_v_type&outputformat=geojson
+
 #### Flood risk area ([ref](https://www.donneesquebec.ca/recherche/fr/dataset/grille-de-presence-de-zone-inondable-identifiee-par-les-mrc))
 
 > Cette grille est une représentation spatiale des secteurs où une cartographie a été produite par les municipalités régionales de comté (MRC) ou les villes à compétence de MRC. Elle indique qu’une cartographie des zones inondables a été intégrée dans le schéma d’aménagement et de développement (SAD) ou dans un règlement de contrôle intérimaire (RCI) en vigueur dans la MRC.
 > Cette information est fournie à titre indicatif et n’a aucune valeur légale. L'utilisateur est invité à communiquer avec les municipalités ou les MRC afin de connaitre les limites exactes des zones inondables cartographiées et la réglementation en vigueur applicable sur leur territoire.
 
 - https://territoires.mamrot.gouv.qc.ca/DonneesOuvertes/DepotDonnees/grillepresencezoneinondable.json
-
-
 
 #### Floods database ([ref](https://www.donneesquebec.ca/recherche/fr/dataset/base-de-donnees-des-zones-inondables))
 
@@ -34,6 +38,12 @@ des images satellitaires dans le visible et proche infrarouge sur les zones les 
 
 - https://geoegl.msp.gouv.qc.ca/partageDQ/inondations2019/msp_inondations2019_eaulibre_20190425.zip
 
+#### Waterbody map of Quebec (2010) ([ref](https://mern.gouv.qc.ca/territoire/portrait/portrait-donnees-mille.jsp))
+
+> Cette base de données couvre l’ensemble du Québec à l’échelle de 1/1 000 000. Elle a été obtenue par la généralisation des éléments de la base de données à l’échelle de 1/250 000 produite par le Ministère. Son contenu permet une représentation du territoire à des échelles variant de 1/1 000 000 à 1/2 500 000. Des jeux de données en format vectoriel et matriciel sont offerts.
+
+- https://mern.gouv.qc.ca/publications/territoire/portrait/1M/hydro_s.zip
+
 #### Microsoft Buildings ([ref](https://github.com/Microsoft/CanadianBuildingFootprints)) ([mbtiles](https://s3.amazonaws.com/opendata.remotepixel.ca/ms_buildings/quebec_buildings.mbtiles))
 
 - https://usbuildingdata.blob.core.windows.net/canadian-buildings/Quebec.zip 
@@ -55,21 +65,27 @@ $ docker-compose up -d
 ### Load data to PG
 
 ```bash
-# Load buildings
-$ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/Quebec.geojson"
-
-# Load Flood data
+# Load Flood Risk data
 $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/grillepresencezoneinondable.json"
 
-# Load Flood data
+# Load 2019 Spring Flood data
 $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/msp_inondations2019_eaulibre_20190425/msp_inondations2019_eaulibre.shp"
 
+# Load Flood db data
 $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/Bdzi.sqlite"
+
+# Load Water body data
+$ fio cat data/hydro_s/hydro_s.shp | jq -c 'select(.properties.HYS_DE_IND=="Lac")' | fio collect > data/hydro_s/hydro_s.geojson
+
+$ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/hydro_s/hydro_s.geojson"
+
+
+# Load MS buildings
+$ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/Quebec.geojson"
 
 # CAN - QC Buildings
 $ ogr2ogr -nlt PROMOTE_TO_MULTI -lco GEOMETRY_NAME=geom -t_srs EPSG:4326 -f PostgreSQL PG:"dbname='postgres' host='localhost' port='5432' user='postgres' password='mysecretpassword'" "data/ODB_Quebec/odb_quebec.shp"
 ```
-
 
 ### Process
 
